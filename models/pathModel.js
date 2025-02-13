@@ -18,7 +18,7 @@ const pathSchema = new mongoose.Schema({
     type: {
         type: String, 
         required: [true, 'must specify type of climbing path'],
-        enum: ['Trad', 'Sport',  'Boulder'],
+        enum: ['trad', 'sport',  'boulder'],
         message: ['climbing path is designated either Trad, Sport, or Boulder']
         
     },
