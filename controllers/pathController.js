@@ -1,7 +1,5 @@
 const Path = require('../models/pathModel');
 
-//export EACH CRUD operation individually 
-
 //CREATE
 exports.createPath = async (req, res) => {
     console.log(req.body);
@@ -88,6 +86,77 @@ exports.deletePath = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             status: 'failed to delete path',
+            message: error
+        });
+    }
+};
+
+//READ INDOOR PATHS
+exports.getIndoorPaths = async (req, res) => {
+    const indoorPaths = await Path.aggregate([
+        {//stage 1: match all paths/documents that are indoors
+            $match: {indoors: true}
+        },
+        {//stage 2: group returned paths/documents by site            
+            $group: {
+                _id: '$site',
+                paths: {
+                    $push: {
+                        name: '$name',
+                        grade: '$grade',
+                        color: '$color'
+                    }
+                },
+                num: {$sum: 1}
+            }        
+        },
+        {
+            //stage 3: deconstructs the paths array to work with individual paths
+            $unwind: '$paths'
+        },
+        {
+            //stage 4: group by grade within each site
+            $group: {
+                _id: {
+                    site: '$_id', 
+                    grade: '$paths.grade'
+                },
+                paths: {
+                    $push: {
+                        name: '$paths.name',
+                        color: '$paths.color'
+                }
+            },
+            grade: {$first: '$paths.grade'}, //ensure each grade is displayed for each group
+            num: {$sum: 1}
+            }
+        },
+        {
+            //stage 5: group by site to group the grades together
+            $group: {
+                _id: '$_id.site',
+                grades: {
+                    $push: {
+                        grade: '$grade',
+                        path: '$paths',
+                        num: '$num'
+                    }
+                }
+            }
+        }
+    ]);
+
+    try {
+        res.status(200).json({
+            status: 'successfully retrieved all indoor paths',
+            results: indoorPaths.length,
+            data: {
+                indoorPaths
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'failed to get indoor paths', 
             message: error
         });
     }

@@ -12,7 +12,7 @@ const pathSchema = new mongoose.Schema({
     color: {
         type: String,
 
-        minlength: [4, 'color name must be more than 4 characters'],
+        minlength: [3, 'color name must be more than 4 characters'],
         maxlength: [12, 'color name must be less than 12 characters']
     },
     type: {
@@ -34,7 +34,7 @@ const pathSchema = new mongoose.Schema({
     },
     site: {
         type: String,
-        minlength: [4, 'site location must be more than 4 characters'],
+        minlength: [2, 'site location must be more than 1 character'],
         maxlength: [40, 'site location must be less than 40 characters']
     },
     rating: {
