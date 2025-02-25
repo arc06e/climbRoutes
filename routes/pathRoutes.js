@@ -3,7 +3,9 @@ const pathController = require('../controllers/pathController');
 const router = express.Router();
 
 //indoors
-router.route('/indoor-paths').get(pathController.getIndoorPaths);
+router
+    .route('/indoor-paths')
+    .get(pathController.getIndoorPaths);
 
 //paths
 router

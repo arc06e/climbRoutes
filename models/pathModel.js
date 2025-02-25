@@ -5,6 +5,8 @@ const pathSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'path name required'],
+        unique: true,
+        trim: true,
         minlength: [4, 'path name must be more than 4 characters'],
         maxlength: [40, 'path name must be less than 40 characters']
     },
@@ -18,7 +20,7 @@ const pathSchema = new mongoose.Schema({
     type: {
         type: String, 
         required: [true, 'must specify type of climbing path'],
-        enum: ['trad', 'sport',  'boulder'],
+        enum: ['trad', 'sport', 'boulder'],
         message: ['climbing path is designated either Trad, Sport, or Boulder']
         
     },
