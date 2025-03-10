@@ -1,4 +1,4 @@
-const AppError = require("../utils/appError");
+const AppError = require("/Users/adamcushing/Projects/climbRoutes/shared/utils/appError");
 
 const handleCastErrorDB = err => {
     const message = `invalid ${err.path}: ${err.value}.`
@@ -18,7 +18,7 @@ const handleValidationErrorDB = err => {
     const message = `Invalid input data. ${errors.join('. ')}`;
     return new AppError(message, 400)
 }
-
+//this is what gets sent to postman
 const sendErrorDev = (err, res) => {
     res.status(err.statusCode).json({
         status: err.status,
@@ -51,38 +51,28 @@ const sendErrorProd = (err, res) => {
 module.exports = (err, req, res, next) => {
     //console.log(err.stack);
     
+    //Our AppError object that we created in the climbingRoutes.js module gets passed here by next()
+    //we are now passing the mongoose error object into the error controller 
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error caught in errorController';
 
     if (process.env.NODE_ENV==='development') {
         sendErrorDev(err, res);
     } else if (process.env.NODE_ENV==='production') {
-        //console.log(Object.getOwnPropertyDescriptor(err, 'errmsg'));
-        console.log(Object.getOwnPropertyDescriptors(err));
-        //object used in tutorial:
-        //-- this creates a shallow copy of 'err' - prototype is not copied; error.name returns undefined. 
-        //--err.errmsg is non-enumberable; not copied [errmsg seems to be legacy code, identical to .message]
-        let error = {...err}; 
-
-        //for handling invalid db id (this not work for dupl. db fields):        
-        let error2 = Object.create(Object.getPrototypeOf(err)); //this copies over the mongoose CastError prototype and can thus read error.name property
-        Object.assign(error2, err); //this mutates 'errorId' - rewrites properties of existing object in memory
-
-        //handles invalid db id
-        if (error2.name === 'CastError') {
-           error = handleCastErrorDB(error);
-        }
-        // if (error.code === 11000) {
-        //     error = handleDuplicateFieldsDB(error); 
-        // }
-        if (error.code === 11000) {
-            error = handleDuplicateFieldsDB(err); 
-        }
-        if(error2.name === 'ValidationError') {
-            error = handleValidationErrorDB(err);
-        }
-
-        sendErrorProd(error, res);
+                let error = {...err}; 
+        
+                //handles invalid db id
+                if (err.name === 'CastError') {
+                    error = handleCastErrorDB(err);
+                 }
+                 if (err.code === 11000) {
+                     error = handleDuplicateFieldsDB(err); 
+                 }
+                 if(err.name === 'ValidationError') {
+                     error = handleValidationErrorDB(err);
+                 }
+         
+                 sendErrorProd(error, res);
     }
     
 

@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify'); 
 
-const pathSchema = new mongoose.Schema({
+const climbingRouteSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'path name required'],
+        required: [true, 'climbing route name required'],
         unique: true,
         trim: true,
-        minlength: [4, 'path name must be more than 4 characters'],
-        maxlength: [40, 'path name must be less than 40 characters']
+        minlength: [4, 'climbing route name must be more than 4 characters'],
+        maxlength: [40, 'climbing route name must be less than 40 characters']
     },
     slug: String,
     color: {
@@ -19,9 +19,9 @@ const pathSchema = new mongoose.Schema({
     },
     type: {
         type: String, 
-        required: [true, 'must specify type of climbing path'],
-        enum: ['trad', 'sport', 'boulder'],
-        message: ['climbing path is designated either Trad, Sport, or Boulder']
+        required: [true, 'must specify type of climbing route'],
+        enum: ['Trad', 'Sport', 'Boulder'],
+        message: ['climbing route is designated either Trad, Sport, or Boulder']
         
     },
     grade: {
@@ -37,7 +37,7 @@ const pathSchema = new mongoose.Schema({
     site: {
         type: String,
         minlength: [2, 'site location must be more than 1 character'],
-        maxlength: [40, 'site location must be less than 40 characters']
+        maxlength: [80, 'site location must be less than 40 characters']
     },
     rating: {
         type: Number, 
@@ -51,7 +51,8 @@ const pathSchema = new mongoose.Schema({
     startDate: [Date],
     finishDate: [Date]
 
-});
+},
+{collection: 'climbing_routes'});
 
-const Path = mongoose.model('Path', pathSchema);
-module.exports = Path;
+const ClimbingRoute = mongoose.model('ClimbingRoute', climbingRouteSchema);
+module.exports = ClimbingRoute;
