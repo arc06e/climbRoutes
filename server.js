@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 //uncaught exceptions -- if you want to catch any uncaught exceptions in the app.js file, you need to declare this code BEFORE requiring app.js
-// process.on('uncaughtException', err => {
-//     console.log('UNCAUGHT EXCEPTION: SHUTTING DOWN...');
-//     console.log(err.name, err.message);
-//     process.exit(1);
-// });
+process.on('uncaughtException', err => {
+    console.log('UNCAUGHT EXCEPTION: SHUTTING DOWN...');
+    console.log(err.name, err.message);
+    process.exit(1);
+});
 
 //console.log(process.env);
 
@@ -27,13 +27,13 @@ const server = app.listen(port, () => {
 });
 
 //error outside of express
-// process.on('unhandledRejection', err => {
-//     console.log(err.name, err.message);
-//     console.log('UNHANDLED REJECTION: SHUTTING DOWN...');
-//     server.close(() => {
-//         process.exit(1);
-//     });
-// });
+process.on('unhandledRejection', err => {
+    console.log(err.name, err.message);
+    console.log('UNHANDLED REJECTION: SHUTTING DOWN...');
+    server.close(() => {
+        process.exit(1);
+    });
+});
 
 
 
