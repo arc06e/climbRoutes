@@ -1,35 +1,28 @@
 const express = require('express');
-//const pathController = require('../controllers/pathController');
 const climbingRouteController = require('../controllers/climbingRouteController');
 const router = express.Router();
 
-//indoors
-// router
-//     .route('/indoor-paths')
-//     .get(pathController.getIndoorPaths);
+//More Specific Routes Should Be Defined First: 
+//If you have routes that are more specific (like routes with parameters), you should define them before more general routes to avoid conflicts.
 
 //climbing routes
 router
-    .route('/')
-    // .get(pathController.getAllPaths) //R All
-    // .post(pathController.createPath); //C One
-    .get(climbingRouteController.getAllClimbingRoutes)
-    .post(climbingRouteController.createClimbingRoute);
+    .route('/indoors')
+    .get(climbingRouteController.getAllClimbingRoutesByLocation);
 
 router
-    .route('/:id')
+    .route('/outdoors')
+    .get(climbingRouteController.getAllClimbingRoutesByLocation);
+
+router
+.route('/:id')
     .get(climbingRouteController.getClimbingRoute)
     .patch(climbingRouteController.updateClimbingRoute)
     .delete(climbingRouteController.deleteClimbingRoute);
+    
+router
+    .route('/')
+    .get(climbingRouteController.getAllClimbingRoutes)
+    .post(climbingRouteController.createClimbingRoute);
 
-//get one path
-// router
-//     .route('/:id')
-//     .get(pathController.getPath) //R One
-//     .patch(pathController.updatePath) //U One
-//     .delete(pathController.deletePath); //D One
-
-
-
-
-module.exports = router;
+    module.exports = router;
