@@ -1,5 +1,14 @@
 const Climber = require('../climbers/models/climberModel');
 
+exports.createClimber = async (req, res) => {
+    try {
+        const newClimber = await Climber.create(req.body);
+        return newClimber;
+    } catch (error) {
+        throw error; 
+    }
+}
+
 exports.getAllClimbers = async (req, res) => {
     try {
         const climbers = await Climber.find();
@@ -18,14 +27,6 @@ exports.getClimber = async (req, res) => {
     }
 }
 
-exports.createClimber = async (req, res) => {
-    try {
-        const newClimber = await Climber.insertOne(req.body);
-        return newClimber;
-    } catch (error) {
-        throw error; 
-    }
-}
 
 exports.updateClimber = async (req, res) => {
     try {

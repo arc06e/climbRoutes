@@ -1,5 +1,17 @@
 const climbersService = require('../climbers');;
 
+exports.createClimber = async (req, res) => {
+    try {
+        const newClimber = await climbersService.createClimber(req);
+        res.status(201).json({
+            status: 'successfully created new climber',
+            newClimber
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 exports.getAllClimbers = async (req, res, next) => {
     try {
         const climbers = await climbersService.getAllClimbers();
@@ -30,19 +42,6 @@ exports.getClimber = async (req, res, next) => {
     }
 }
 
-exports.createClimber = async (req, res) => {
-    try {
-        const newClimber = await climbersService.createClimber(req);
-        res.status(201).json({
-            status: 'successfully created new climber',
-            data: {
-                newClimber
-            }
-        });
-    } catch (error) {
-        next(error);
-    }
-}
 
 exports.updateClimber = async (req, res) => {
     try {
