@@ -1,6 +1,5 @@
 const climbingRoutesService = require('../climbingRoutes');
 
-
 //CREATE 
 exports.createClimbingRoute = async (req, res, next) => {
     try {
@@ -45,6 +44,7 @@ exports.getClimbingRoute = async (req, res, next) => {
         });
         
     } catch (error) {
+
         next(error);
     }
 }
@@ -75,73 +75,36 @@ exports.deleteClimbingRoute = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
 
-}
+//READ ROUTES BY LOCATION
+exports.getAllClimbingRoutesByLocation = async (req, res, next) => {
+    try {
 
-//CREATE
-// exports.createPath = catchAsync(async (req, res, next) => {
-//     //console.log(req.body);
-//     const newPath = await Path.create(req.body);
+        let isIndoors;
+        let location; 
 
-//     res.status(201).json({
-//         status: 'successfully created path',
-//         path: newPath      
-//     })
+        if(req.url === '/indoors') {
+            isIndoors = true;
+            location = 'indoors'
+        } else if(req.url === '/outdoors') {
+            isIndoors = false;
+            location = 'outdoors' 
+        }
 
-// });
+        const indoorClimbingRoutes = await climbingRoutesService.getAllClimbingRoutesByLocation(req, null, null, isIndoors);        
+        res.status(200).json({
+            status: `successfully retrieved all ${location} routes`,
+            results: indoorClimbingRoutes.length,
+            data: {
+                indoorClimbingRoutes
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
 
-// //READ ALL 
-// exports.getAllPaths = catchAsync(async (req, res, next) => {
-//     const paths = await Path.find();
-
-//         res.status(200).json({
-//             results: paths.length,
-//             paths
-//         });
-// });
-
-// //READ ONE
-// exports.getPath = catchAsync(async (req, res, next) => {
-//     const path = await Path.findById(req.params.id);
-
-//     if (!path) {
-//         return next(new AppError('No path found with that ID', 404))
-//     }
-
-//     res.status(200).json({
-//         status: 'success',
-//         results: path.length,
-//         path
-//     });
-// });
-
-// //UPDATE ONE
-// exports.updatePath = catchAsync(async (req, res, next) => {
-//     const updatedPath = await Path.findByIdAndUpdate(req.params.id, req.body, {
-//         new: true,
-//         runValidators: true
-//     });
-
-//     if (!path) {
-//         return next(new AppError('No path found with that ID', 404))
-//     }
-
-//     res.status(200).json({
-//         status: 'successfully updated path',
-//         updatedPath
-//     });
-// });
-
-// //DELETE ONE
-// exports.deletePath = async (req, res, next) => {
-//     const path = await Path.findByIdAndDelete(req.params.id);
-
-//     if (!path) {
-//         return next(new AppError('No path found with that ID', 404))
-//     }
-
-//     res.status(204).json({});
-// };
+};
 
 // //READ INDOOR PATHS
 // exports.getIndoorPaths = catchAsync(async (req, res, next) => {

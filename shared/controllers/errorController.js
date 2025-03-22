@@ -51,7 +51,7 @@ const sendErrorProd = (err, res) => {
 module.exports = (err, req, res, next) => {
     //console.log(err.stack);
     
-    //Our AppError object that we created in the climbingRoutes.js module gets passed here by next()
+    //Our AppError object that we created in the climbingRoutes.js module gets passed here by next() from the routes controller
     //we are now passing the mongoose error object into the error controller 
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error caught in errorController';
