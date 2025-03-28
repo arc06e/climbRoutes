@@ -1,5 +1,7 @@
 const climbingRoutesService = require('../climbingRoutes');
 
+//TODO: need to refactor this controller to pass only the necessary properties into the service layer
+
 //CREATE 
 exports.createClimbingRoute = async (req, res, next) => {
     try {

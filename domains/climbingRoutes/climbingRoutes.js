@@ -1,9 +1,9 @@
-const errorController = require('/Users/adamcushing/Projects/climbRoutes/shared/controllers/errorController');
+//const errorController = require('/Users/adamcushing/Projects/climbRoutes/shared/controllers/errorController');
 const ClimbingRoute = require('../climbingRoutes/models/climbingRouteModel');
 const AppError = require('/Users/adamcushing/Projects/climbRoutes/shared/utils/appError');
 
 exports.createNewClimbingRoute = async (req, res, next) => {
-    console.log(req.body);
+    //console.log(req.body);
     try {
         const newClimbingRoute = await ClimbingRoute.create(req.body);
         return newClimbingRoute;

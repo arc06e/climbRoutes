@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 //const validator = require('validator');
+const bcrypt = require('bcryptjs');
 
 const climberSchema = new mongoose.Schema({
     //name
@@ -34,9 +35,32 @@ const climberSchema = new mongoose.Schema({
         trim: true,
         minLength: [8, 'password must be at least 8 characters long'],
         //maxLength: [16, 'password cannot be more than 16 characters long'],
-        required: true
+        required: true,
+        validate: {
+            validator: function(el) {
+                return el === this.password; //'this' will only work on create() and save()! This means whenever we want to update a user, we will have to use create/save() as well
+            },
+            message: 'Passwords are not the same'
+        }
     }
 });
+
+//only run this function if password was actually modified 
+//pre hooks - happens in the moment between receiving the data and saving the data to the db (persisted)
+climberSchema.pre('save', async function(next) {
+    if(!this.isModified('password')) {
+        return next();
+    } else {
+        //popular hashing algorithm - async version
+        this.password = await bcrypt.hash(this.password, 12);
+        //delete passwordConfirm fields
+        this.passwordConfirm = undefined; 
+    }
+});
+
+climberSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+    return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const Climber = mongoose.model('Climber', climberSchema);
 
