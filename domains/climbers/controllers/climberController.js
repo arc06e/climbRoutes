@@ -1,5 +1,7 @@
 const climbersService = require('../climbers');;
 
+//TODO: need to refactor this controller to pass only the necessary properties into the service layer
+
 exports.createClimber = async (req, res) => {
     try {
         const newClimber = await climbersService.createClimber(req);
