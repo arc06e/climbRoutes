@@ -1,5 +1,6 @@
 const express = require('express');
 const climbingRouteController = require('../controllers/climbingRouteController');
+const authService = require('../../../shared/services/auth');
 const router = express.Router();
 
 //More Specific Routes Should Be Defined First: 
@@ -16,13 +17,13 @@ router
 
 router
 .route('/:id')
-    .get(climbingRouteController.getClimbingRoute)
-    .patch(climbingRouteController.updateClimbingRoute)
-    .delete(climbingRouteController.deleteClimbingRoute);
+    .get(authService.protect, climbingRouteController.getClimbingRoute)
+    .patch(authService.protect, climbingRouteController.updateClimbingRoute)
+    .delete(authService.protect, climbingRouteController.deleteClimbingRoute);
     
 router
     .route('/')
-    .get(climbingRouteController.getAllClimbingRoutes)
-    .post(climbingRouteController.createClimbingRoute);
+    .get(authService.protect, climbingRouteController.getAllClimbingRoutes)
+    .post(authService.protect, climbingRouteController.createClimbingRoute);
 
     module.exports = router;

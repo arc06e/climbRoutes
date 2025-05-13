@@ -13,7 +13,7 @@ const climbingRouteSchema = new mongoose.Schema({
     slug: String,
     color: {
         type: String,
-
+        required: false,
         minlength: [3, 'color name must be more than 4 characters'],
         maxlength: [12, 'color name must be less than 12 characters']
     },

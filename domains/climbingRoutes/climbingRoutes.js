@@ -55,7 +55,7 @@ exports.deleteClimbingRoute = async (req, res, next) => {
 exports.getAllClimbingRoutesByLocation = async (req, res, next, isIndoors) => {
     try {
         const climbingRoutesByLocation = await ClimbingRoute.aggregate([
-            {//stage 1: match all routes/documents that are indoors
+            {//stage 1: match all routes/documents by whether or not they are indoors
                 $match: {indoors: isIndoors}
             },
             {//stage 2: group returned routes/documents by site            
