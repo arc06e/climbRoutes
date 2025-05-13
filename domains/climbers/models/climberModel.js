@@ -20,6 +20,9 @@ const climberSchema = new mongoose.Schema({
     },
     //photo
     photo: String,
+
+    //role
+
     //password
     password: {
         type: String,
@@ -42,7 +45,8 @@ const climberSchema = new mongoose.Schema({
             },
             message: 'Passwords are not the same'
         }
-    }
+    },
+    passwordChangedAt: Date
 });
 
 //only run this function if password was actually modified 
@@ -61,6 +65,18 @@ climberSchema.pre('save', async function(next) {
 climberSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+climberSchema.methods.changePasswordAfter = function(JWTTimestamp) {
+    if(this.passwordChangedAt) {
+        //if password has been changed && password was changed after JWT was created - need to log in again
+        //this is in miliseconds second x 1000 - , 10: specifies base
+        const changedTimeStamp = parseInt(this.passwordChangedAt.getTime() / 1000, 10);
+        console.log(changedTimeStamp, JWTTimestamp);
+        return JWTTimestamp < changedTimeStamp;
+    }
+    //false means not changed
+    return false;
+}
 
 const Climber = mongoose.model('Climber', climberSchema);
 

@@ -30,7 +30,8 @@ exports.getClimber = async (req, res) => {
 
 exports.updateClimber = async (req, res) => {
     try {
-        const updatedClimber = await Climber.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        const updatedClimber = await Climber.findByIdAndUpdate(req.params.id, req.body, {new: true, runValidators: true});
+        //const updatedClimber = await Climber.findByIdAndUpdate(req.params.id, req.body);
         return updatedClimber; 
     } catch (error) {
         throw error; 
